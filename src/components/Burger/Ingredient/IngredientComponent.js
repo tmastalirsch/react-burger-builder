@@ -11,11 +11,14 @@ const IngredientComponent = ({ type }) => {
             case ('bread-bottom'):
                 ingredient = <div className={classes.BreadBottom}></div>;
                 break;
+            case ('bread-middle'):
+                ingredient = <div className={classes.BreadMiddle}></div>;
+                break;
             case ('bread-top'):
                 ingredient = (
                     <div className={classes.BreadTop}>
-                        <div className={classes.Seed1}></div>
-                        <div className={classes.Seed2}></div>
+                        <div className={classes.Seeds1}></div>
+                        <div className={classes.Seeds2}></div>
                     </div>
                 );
                 break;

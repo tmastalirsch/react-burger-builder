@@ -5,30 +5,25 @@ import IngredientComponent from './Ingredient/IngredientComponent';
 
 const BurgerComponent = (props) => {
 
+    /** */
+    const getIngredientComponent = (ingredients) => Object.keys(ingredients)
+        .map((key) => [...Array(props.ingredients[key])]
+                .map((_, index) => <IngredientComponent key={key + index} type={key}/>)
+            )
+        .reduce((current, previous) => current.concat(previous), []);
+    /** */
+    let ingredientComponent = getIngredientComponent(props.ingredients);
+
+    if(ingredientComponent.length === 0){
+        ingredientComponent = <p>Please start adding ingredients !</p>
+    }
+
     return (
-        <Aux>
-            <div className={classes.Burger}>
-                <IngredientComponent type="bread-top"/>
-                <IngredientComponent type="bacon"/>
-                <IngredientComponent type="cheese"/>
-                <IngredientComponent type="meat"/>
-                <IngredientComponent type="salad"/>
-                <IngredientComponent type="bread-bottom"/>
-            </div>
-            <div className={classes.Burger}>
-                <IngredientComponent type="bread-top"/>
-                <IngredientComponent type="bacon"/>
-                <IngredientComponent type="meat"/>
-                <IngredientComponent type="bread-bottom"/>
-            </div>
-            <div className={classes.Burger}>
-                <IngredientComponent type="bread-top"/>
-                <IngredientComponent type="cheese"/>
-                <IngredientComponent type="meat"/>
-                <IngredientComponent type="salad"/>
-                <IngredientComponent type="bread-bottom"/>
-            </div>
-        </Aux>
+        <div className={classes.Burger}>
+            <IngredientComponent type="bread-top"/>
+                { ingredientComponent }
+            <IngredientComponent type="bread-bottom"/>
+        </div>
         
         
     )
