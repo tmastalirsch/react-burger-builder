@@ -16,7 +16,12 @@ const ControlsComponent = (props) => {
     return (
         <div className={classes.Controls}>
             {
-                controls.map((ctrl, index) => <Control key={index} label={ctrl.label}/>)
+                controls.map((ctrl, index) => (
+                    <Control 
+                        key={index} 
+                        label={ctrl.label} 
+                        added={() => props.ingredientAdded(props.index, ctrl.type)}/>)
+                )
             }
         </div>
     )

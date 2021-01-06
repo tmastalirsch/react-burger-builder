@@ -6,33 +6,52 @@ import Aux from './../../util/Aux';
 import Burger from './../../components/Burger/Burger';
 import Controls from './../../components/Burger/Controls/Controls';
 
+
+const INGREDIENTS_PRICE = {
+    salad: 0.5,
+    bacon: 1.0,
+    meat: 1.5,
+    cheese: 0.5,
+}   
 class BurgerBuilder extends Component {
 
     state = {
-        ingredients: [
+        burgers: [
             {
-                bacon: faker.random.number({min: 0, max: 2}),
-                meat: faker.random.number({min: 0, max: 2}),
-                cheese: faker.random.number({min: 0, max: 3}),
-                salad: faker.random.number({min: 0, max: 1})
+                ingredients: {
+                    bacon: faker.random.number({min: 0, max: 2}),
+                    meat: faker.random.number({min: 0, max: 2}),
+                    cheese: faker.random.number({min: 0, max: 3}),
+                    salad: faker.random.number({min: 0, max: 1})
+                },
+                price: faker.random.number({min: 3, max: 6})
             },
             {
-                bacon: faker.random.number({min: 0, max: 2}),
-                meat: faker.random.number({min: 0, max: 2}),
-                cheese: faker.random.number({min: 0, max: 3}),
-                salad: faker.random.number({min: 0, max: 1})
+                ingredients: {
+                    bacon: faker.random.number({min: 0, max: 2}),
+                    meat: faker.random.number({min: 0, max: 2}),
+                    cheese: faker.random.number({min: 0, max: 3}),
+                    salad: faker.random.number({min: 0, max: 1})
+                },
+                price: faker.random.number({min: 3, max: 6})
             },
             {
-                bacon: faker.random.number({min: 0, max: 2}),
-                meat: faker.random.number({min: 0, max: 2}),
-                cheese: faker.random.number({min: 0, max: 3}),
-                salad: faker.random.number({min: 0, max: 1})
+                ingredients: {
+                    bacon: faker.random.number({min: 0, max: 2}),
+                    meat: faker.random.number({min: 0, max: 2}),
+                    cheese: faker.random.number({min: 0, max: 3}),
+                    salad: faker.random.number({min: 0, max: 1})
+                },
+                price: faker.random.number({min: 3, max: 6})
             },
             {
-                bacon: faker.random.number({min: 0, max: 2}),
-                meat: faker.random.number({min: 0, max: 2}),
-                cheese: faker.random.number({min: 0, max: 3}),
-                salad: faker.random.number({min: 0, max: 1})
+                ingredients: {
+                    bacon: faker.random.number({min: 0, max: 2}),
+                    meat: faker.random.number({min: 0, max: 2}),
+                    cheese: faker.random.number({min: 0, max: 3}),
+                    salad: faker.random.number({min: 0, max: 1})
+                },
+                price: faker.random.number({min: 3, max: 6})
             },
 
         ]
@@ -46,9 +65,11 @@ class BurgerBuilder extends Component {
 
     addIngredientHandler(index, type)
     {
-        const ingredientCount = this.state.ingredients[index][type];
-        const updatedIngredientCount = ingredientCount + 1;
-        const updatedIngredient = {...this.state.ingredients[index]};
+        const copyBurgersState = [...this.state.burgers];
+        copyBurgersState[index]['ingredients'][type]++;
+        const additionPrice = INGREDIENTS_PRICE[type];
+        copyBurgersState[index].price += additionPrice;
+        this.setState({ ...copyBurgersState });
 
     }
 
@@ -59,10 +80,10 @@ class BurgerBuilder extends Component {
 
 
     render() {
-        return this.state.ingredients.map((ingredient, index) => (
+        return this.state.burgers.map((burger, index) => (
             <Aux key={index}>
-                <Burger ingredients={ingredient}/>
-                <Controls />
+                <Burger ingredients={burger.ingredients}/>
+                <Controls index={index} ingredientAdded={this.addIngredientHandler.bind(this)} />
             </Aux>
         ));
     }

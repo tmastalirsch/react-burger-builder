@@ -1,5 +1,5 @@
 import React from 'react';
-import Aux from './../../util/Aux';
+
 import classes from './Burger.module.css';
 import IngredientComponent from './Ingredient/IngredientComponent';
 
