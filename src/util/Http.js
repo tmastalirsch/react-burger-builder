@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 
 import API from './Api';
 
-
-
 /**
  * @description
  * @param {string} endpoint 
- * @param {array} dependencies 
+ * @param {any} dependencies 
  * @returns {array}
  */
 export const useHttpGet = (endpoint, dependencies) => {

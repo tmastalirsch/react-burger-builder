@@ -89,6 +89,10 @@ const BurgerBuilder = () => {
         setPurchasingState(!purchasing);
     }
 
+    const purchaseCancelHandler = () => {
+        setPurchasingState(false);
+    }
+
     return (
         <Aux> 
             {
@@ -97,7 +101,7 @@ const BurgerBuilder = () => {
                 ) : burgers.map((burger) => {
                     return (
                     <Aux key={burger.id}>
-                        <ModalComponent show={purchasing}>
+                        <ModalComponent modalClose={purchaseCancelHandler} show={purchasing}>
                             <OrderSummaryComponent ingredients={burger.ingredients}/>
                         </ModalComponent>
                         <BurgerComponent ingredients={burger.ingredients}/>
