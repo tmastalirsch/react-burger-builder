@@ -7,41 +7,48 @@ import classes from './Controls.module.css';
 
 const ControlsComponent = (props) => {
 
+    const isDisabled = (type) => {
+        const ingredient = props.ingredients.find((ingredient) => ingredient.name === type);
+        return !ingredient.total;
+    }
+
     const controls = [
         {label: 'Salad', type: 'salad'},
         {label: 'Bacon', type: 'bacon'},
         {label: 'Meat', type: 'meat'},
         {label: 'Cheese', type: 'cheese'},
     ];
-
     return (
         <div className={classes.Controls}>
             <p>Current Price: <strong>{props.price.toFixed(2)}$</strong></p>
             {
-                controls.map((ctrl, index) => (
-                    <Control 
-                        key={index} 
-                        label={ctrl.label} 
-                        added={() => props.ingredientAdded(props.index, ctrl.type)}
-                        removed={() => props.ingredientRemoved(props.index, ctrl.type)}
-                        disabled={props.disabled[ctrl.type]}
-                        />)
-                )
+                controls.map((ctrl, index) => {
+                    return ( 
+                        <Control 
+                            key={index} 
+                            label={ctrl.label} 
+                            added={() => props.ingredientAdded(props.id, ctrl.type)}
+                            removed={() => props.ingredientRemoved(props.id, ctrl.type)}
+                            disabled={isDisabled(ctrl.type)}
+                            />
+                    )})
             }
             <button 
                 className={classes.OrderButton} 
-                disabled={props.isPurchaseable}>ORDER NOW</button>
+                disabled={!props.isPurchaseable}
+                onClick={() => props.ordered()}>ORDER NOW</button>
         </div>
     )
 }
 
 ControlsComponent.propTypes = {
-    index: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+    ingredients: PropTypes.array.isRequired,
     price: PropTypes.number.isRequired,
-    isPurchaseable: PropTypes.bool.isRequired,
+    isPurchaseable: PropTypes.string.isRequired,
     ingredientAdded: PropTypes.func.isRequired,
     ingredientRemoved: PropTypes.func.isRequired,
-    disabled: PropTypes.object.isRequired,
+    ordered: PropTypes.func.isRequired,
 }
 
 export default ControlsComponent;

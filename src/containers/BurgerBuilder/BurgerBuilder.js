@@ -1,151 +1,121 @@
-import React, { Component} from 'react';
-import * as faker from 'faker';
+import React, { useState } from 'react';
 
 import Aux from './../../util/Aux';
-import { useHttpGet } from './../../util/Http';
-import Burger from './../../components/Burger/Burger';
+import * as Http from './../../util/Http';
+
+import ModalComponent from '../../components/UI/Modal/Modal'; 
+import BurgerComponent from './../../components/Burger/BurgerComponent';
 import Controls from './../../components/Burger/Controls/Controls';
+import OrderSummaryComponent from './../../components/Burger/OrderSummary/OrderSummary';
+
+const BurgerBuilder = () => {
+
+    const PRICES_ENDPOINT = 'prices';
+    const BURGERS_ENDPOINT = 'burgers';
+
+    const {state: burgers, setState: setBurgers, isLoading: isBurgersLoading} = Http.useHttpGet(BURGERS_ENDPOINT, []);
+    const {state: prices, isLoading: isPriceLoading } = Http.useHttpGet(PRICES_ENDPOINT, []);
+    const [purchasing, setPurchasingState] = useState(false);
+
+    const isLoading = isBurgersLoading && isPriceLoading;
+
+    /** @returns {{id: string, ingredients: array, price: number, purchase: boolean}[]} */
+    const getBurgers = () => [...burgers];
+
+    const updateBurger = (burger) => {
+        const burgers = getBurgers().map((b) => (b.id === burger.id) ? burger : b); 
+        setBurgers(burgers);
+
+    } 
+
+    /** @returns {{id: string, ingredients: array, price: number, purchase: boolean}} */
+    const getBurgerById = (id) => getBurgers().find((burger) => burger.id === id);
+
+    /**
+     * @param {string} type
+     * @returns {{id: string, price: number ,type: string}} 
+     */
+    const getPriceByType = (type) => prices.find((price) => price.type === type);
 
 
-const INGREDIENTS_PRICE = {
-    salad: 0.5,
-    bacon: 1.0,
-    meat: 1.5,
-    cheese: 0.5,
-}   
-class BurgerBuilder extends Component {
-
-    state = {
-        burgers: [
-            {
-                ingredients: {
-                    bacon: faker.random.number({min: 0, max: 2}),
-                    meat: faker.random.number({min: 0, max: 2}),
-                    cheese: faker.random.number({min: 0, max: 3}),
-                    salad: faker.random.number({min: 0, max: 1})
-                },
-                price: faker.random.number({min: 3, max: 6}),
-                purchaseable: false
-            },
-            {
-                ingredients: {
-                    bacon: faker.random.number({min: 0, max: 2}),
-                    meat: faker.random.number({min: 0, max: 2}),
-                    cheese: faker.random.number({min: 0, max: 3}),
-                    salad: faker.random.number({min: 0, max: 1})
-                },
-                price: faker.random.number({min: 3, max: 6}),
-                purchaseable: false
-            },
-            {
-                ingredients: {
-                    bacon: faker.random.number({min: 0, max: 2}),
-                    meat: faker.random.number({min: 0, max: 2}),
-                    cheese: faker.random.number({min: 0, max: 3}),
-                    salad: faker.random.number({min: 0, max: 1})
-                },
-                price: faker.random.number({min: 3, max: 6}),
-                purchaseable: false
-            },
-            {
-                ingredients: {
-                    bacon: faker.random.number({min: 0, max: 2}),
-                    meat: faker.random.number({min: 0, max: 2}),
-                    cheese: faker.random.number({min: 0, max: 3}),
-                    salad: faker.random.number({min: 0, max: 1})
-                },
-                price: faker.random.number({min: 3, max: 6}),
-                purchaseable: false
-            },
-
-        ]
-    };
-
-    async componentDidMount(){
-        const burgers = this.getBurgerResponse();
-        console.log(burgers);
+    const getBurgerIngredients = (index) => {
+        const burger = getBurgerById(index);
+        return burger['ingredients'];
     }
 
-    getBurgerResponse()
-    {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        // return useHttpGet('burgers');
+    const updatePurchaseState = (id) => {
+        const burger = getBurgerById(id);
+        const ingredients = getBurgerIngredients(id);
+        const sum = ingredients.reduce((prev, curr) => prev + curr.total, 0);
+        burger.purchaseable = !!sum;
+        updateBurger(burger);
     }
 
-    getRandomIngredient()
-    {
-        const ingredients = ['bacon', 'meat', 'cheese', 'salad']
-        return faker.random.arrayElement(ingredients);
-    }
-
-    getBurgersState(){
-        return [...this.state.burgers];
-    }
-
-    setBurgerState(state){
-        this.setState({ ...state });
-    }
-
-    getBurgerIngredients(index){
-        return this.getBurgersState()[index]['ingredients'];
-    }
-
-    updatePurchaseState(index){
-        const copyBurgerState = this.getBurgersState();
-        const ingredients = this.getBurgerIngredients(index);
-        const sum = Object.keys(ingredients).map(((key) => ingredients[key])).reduce((prev, curr) => prev + curr, 0);
-        copyBurgerState[index]['purchaseable']= !sum;
-        this.setBurgerState(copyBurgerState);
-    }
-
-    addIngredientHandler(index, type)
-    {
-        const copyBurgersState = this.getBurgersState
-        copyBurgersState[index]['ingredients'][type]++;
-        const additionPrice = INGREDIENTS_PRICE[type];
-        copyBurgersState[index].price += additionPrice;
-        this.setState({ ...copyBurgersState });
-        this.updatePurchaseState(index);
-    }
-
-    removeIngredientHandler(index, type)
-    {
-        const copyBurgersState = this.getBurgersState();
-
-        if(!copyBurgersState[index]['ingredients'][type]){
-            return;
-        }
-
-        copyBurgersState[index]['ingredients'][type]--;
-        const additionPrice = INGREDIENTS_PRICE[type];
-        copyBurgersState[index].price -= additionPrice;
-        this.setState({ ...copyBurgersState });
-        this.updatePurchaseState(index);
-    }
-
-
-    render() {
-        return this.state.burgers.map((burger, index) => {
-            const ingredients = { ...burger.ingredients };
-
-            for (let key in ingredients){
-                ingredients[key] = !ingredients[key];
-            }
-
-            return (
-            <Aux key={index}>
-                <Burger ingredients={burger.ingredients}/>
-                <Controls 
-                    index={index}
-                    price={burger.price} 
-                    isPurchaseable={burger.purchaseable}
-                    ingredientRemoved={this.removeIngredientHandler.bind(this)} 
-                    ingredientAdded={this.addIngredientHandler.bind(this)}
-                    disabled={ingredients} 
-                />
-            </Aux>)
+    const addIngredientHandler = (id, type) => {
+        const burger = getBurgerById(id);
+        const ingredients = getBurgerIngredients(id);
+        burger.ingredients = ingredients.map((ingredient) => {
+            if (ingredient.name === type) ingredient.total++;
+            return ingredient;
         });
+        const additionPrice = getPriceByType(type);
+        burger.price += additionPrice.price;
+        updateBurger(burger);
+        updatePurchaseState(id);
     }
+
+    const removeIngredientHandler = (id, type) => {
+        const burger = getBurgerById(id)
+        const ingredients = getBurgerIngredients(id);
+
+        const ingredient = ingredients.find((ingredient) => ingredient.name === type);
+
+        if(!ingredient.total) {
+            return;
+        } else {
+            burger.ingredients = ingredients.map((ingredient) => {
+                if (ingredient.name === type && ingredient.total) ingredient.total--;
+                return ingredient;
+            });
+    
+            const additionPrice = getPriceByType(type);
+            burger.price -= additionPrice.price;
+            updateBurger(burger);
+            updatePurchaseState(id);
+        }
+    }
+
+    const purchaseHandler = () => {
+        setPurchasingState(!purchasing);
+    }
+
+    return (
+        <Aux> 
+            {
+                (isLoading) ? (
+                    <p>Loading ...</p>
+                ) : burgers.map((burger) => {
+                    return (
+                    <Aux key={burger.id}>
+                        <ModalComponent show={purchasing}>
+                            <OrderSummaryComponent ingredients={burger.ingredients}/>
+                        </ModalComponent>
+                        <BurgerComponent ingredients={burger.ingredients}/>
+                        <Controls 
+                            id={burger.id}
+                            price={burger.price} 
+                            isPurchaseable={burger.purchaseable}
+                            ingredients={burger.ingredients} 
+                            ingredientRemoved={removeIngredientHandler} 
+                            ingredientAdded={addIngredientHandler}
+                            ordered={purchaseHandler}
+                        />
+                    </Aux>)
+            })
+            } 
+        </Aux>
+    );
+
 }
 
 

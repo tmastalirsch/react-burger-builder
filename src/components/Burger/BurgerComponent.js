@@ -6,15 +6,13 @@ import IngredientComponent from './Ingredient/IngredientComponent';
 const BurgerComponent = (props) => {
 
     /** */
-    const getIngredientComponent = (ingredients) => Object.keys(ingredients)
-        .map((key) => [...Array(props.ingredients[key])]
-                .map((_, index) => <IngredientComponent key={key + index} type={key}/>)
-            )
-        .reduce((current, previous) => current.concat(previous), []);
+    const getIngredientComponent = (ingredients) => ingredients
+        .map((ingredient) => [...new Array(ingredient.total)]
+            .map((index) =>  <IngredientComponent key={index} type={ingredient.name}/>))
     /** */
     let ingredientComponent = getIngredientComponent(props.ingredients);
-
-    if(ingredientComponent.length === 0){
+    const total = props.ingredients.reduce((prev, curr) => prev+ curr.total, 0);
+    if( total === 0){
         ingredientComponent = <p>Please start adding ingredients !</p>
     }
 
