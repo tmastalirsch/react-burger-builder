@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import * as faker from 'faker';
 
 import Aux from './../../util/Aux';
-
+import { useHttpGet } from './../../util/Http';
 import Burger from './../../components/Burger/Burger';
 import Controls from './../../components/Burger/Controls/Controls';
 
@@ -60,6 +60,17 @@ class BurgerBuilder extends Component {
 
         ]
     };
+
+    async componentDidMount(){
+        const burgers = this.getBurgerResponse();
+        console.log(burgers);
+    }
+
+    getBurgerResponse()
+    {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        // return useHttpGet('burgers');
+    }
 
     getRandomIngredient()
     {

@@ -1,0 +1,72 @@
+{
+    "users": [],
+    "burgers": [
+        {
+            "id": 1,
+            "ingredients": [
+                { "id": 1 , "total": 0 },
+                { "id": 2 , "total": 0 },
+                { "id": 3 , "total": 0 },
+                { "id": 4 , "total": 0 }
+            ],
+            "price": 0,
+            "purchaseable": "false"
+        },
+        {
+            "id": 2,
+            "ingredients":[
+                { "id": 1 , "total": 0 },
+                { "id": 2 , "total": 0 },
+                { "id": 3 , "total": 0 },
+                { "id": 4 , "total": 0 }
+            ],
+            "price": 0,
+            "purchaseable": "false"
+        },
+        {
+            "id": 3,
+            "ingredients": [
+                { "id": 1 , "total": 0 },
+                { "id": 2 , "total": 0 },
+                { "id": 3 , "total": 0 },
+                { "id": 4 , "total": 0 }
+            ],
+            "price": 0,
+            "purchaseable": "false"
+        },
+        {
+            "id": 4,
+            "ingredients": [
+                { "id": 1 , "total": 0 },
+                { "id": 2 , "total": 0 },
+                { "id": 3 , "total": 0 },
+                { "id": 4 , "total": 0 }
+            ],
+            "price": 0,
+            "purchaseable": "false"
+        }
+    ],
+
+    "ingredients" : [
+        {
+            "id" : 1,
+            "name": "bacon",
+            "price": 1.0
+        },
+        {
+            "id" : 2,
+            "name": "meat",
+            "price": 1.5
+        },
+        {
+            "id" : 3,
+            "name": "cheese",
+            "price": 0.5
+        },
+        {
+            "id" : 4,
+            "name": "salad",
+            "price": 0.5
+        }
+    ]
+}
