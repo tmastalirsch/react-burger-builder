@@ -7,17 +7,20 @@ import ModalComponent from '../../components/UI/Modal/Modal';
 import BurgerComponent from './../../components/Burger/BurgerComponent';
 import Controls from './../../components/Burger/Controls/Controls';
 import OrderSummaryComponent from './../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from './../../components/UI/Spinner/Spinner';
+
+import withErrorHandler from './../withErrorHandler/withErrorHandler';
 
 const BurgerBuilder = () => {
 
-    const PRICES_ENDPOINT = 'prices';
-    const BURGERS_ENDPOINT = 'burgers';
+    const PRICES_ENDPOINT = '/prices';
+    const BURGERS_ENDPOINT = '/burgers';
 
     const {state: burgers, setState: setBurgers, isLoading: isBurgersLoading} = Http.useHttpGet(BURGERS_ENDPOINT, []);
     const {state: prices, isLoading: isPriceLoading } = Http.useHttpGet(PRICES_ENDPOINT, []);
     const [purchasing, setPurchasingState] = useState(false);
 
-    const isLoading = isBurgersLoading && isPriceLoading;
+    const isLoading = (isBurgersLoading && isPriceLoading);
 
     /** @returns {{id: string, ingredients: array, price: number, purchase: boolean}[]} */
     const getBurgers = () => [...burgers];
@@ -96,44 +99,42 @@ const BurgerBuilder = () => {
         setPurchasingState(false);
     }
 
-    const purchaseContinueHandler = () => {
-
-    }
+    const purchaseContinueHandler = () => {}
 
     return (
-        <Aux> 
+        <div>
             {
                 (isLoading) ? (
-                    <p>Loading ...</p>
+                    <Spinner/>
                 ) : getBurgers().map((burger) => {
                     return (
-                    <Aux key={burger.id}>
-                        <ModalComponent close={modelCloseHandler} show={purchasing}>
-                            <OrderSummaryComponent 
-                            price={burger.price}
-                            ingredients={burger.ingredients}
-                            purchaseCancel={purchaseCancelHandler}
-                            purchaseContinue={purchaseContinueHandler}
+                        <Aux key={burger.id}>
+                            <ModalComponent close={modelCloseHandler} show={purchasing}>
+                                <OrderSummaryComponent 
+                                price={burger.price}
+                                ingredients={burger.ingredients}
+                                purchaseCancel={purchaseCancelHandler}
+                                purchaseContinue={purchaseContinueHandler}
+                                />
+                            </ModalComponent>
+                            <BurgerComponent ingredients={burger.ingredients}/>
+                            <Controls 
+                                id={burger.id}
+                                price={burger.price} 
+                                isPurchaseable={burger.purchaseable}
+                                ingredients={burger.ingredients} 
+                                ingredientRemoved={removeIngredientHandler} 
+                                ingredientAdded={addIngredientHandler}
+                                ordered={purchaseHandler}
                             />
-                        </ModalComponent>
-                        <BurgerComponent ingredients={burger.ingredients}/>
-                        <Controls 
-                            id={burger.id}
-                            price={burger.price} 
-                            isPurchaseable={burger.purchaseable}
-                            ingredients={burger.ingredients} 
-                            ingredientRemoved={removeIngredientHandler} 
-                            ingredientAdded={addIngredientHandler}
-                            ordered={purchaseHandler}
-                        />
-                    </Aux>)
-            })
+                        </Aux>)
+                })
             } 
-        </Aux>
+        </div>
     );
 
 }
 
 
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder);

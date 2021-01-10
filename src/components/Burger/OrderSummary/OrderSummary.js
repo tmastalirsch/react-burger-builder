@@ -1,9 +1,21 @@
 import React from 'react';
 
 import Aux from './../../../util/Aux';
+import * as Util from './../../../util/Util';
+
 import Button from './../../UI/Button/Button';
 
 const OrderSummaryComponent = (props) => {
+
+
+    Util.useComponentDidUpdate(() => {
+        console.log("Component did update!");
+    });
+
+    Util.useComponentDidUpdate(() => {
+        console.log("myProp did update!");
+    }, [props.ingredients]);
+
     const getIngredientComponent = () => (props.ingredients.map((ingredient, index) => (
             <li key={index}>
                 <span>{index + 1}</span>.  

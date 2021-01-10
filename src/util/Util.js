@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 /**
  * @description Parse an json object to given class
  * @param {object} cls
@@ -32,3 +32,21 @@ export const useWindowsSize = () => {
 
     return windowSize
 }
+
+/**
+ * @description
+ * @param {*} handler 
+ * @param {*} deps 
+ */
+export const useComponentDidUpdate = (handler, deps) => {
+    const isInitialMount = useRef(true);
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
+        return handler();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, deps);
+};

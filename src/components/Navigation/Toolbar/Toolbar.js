@@ -11,7 +11,10 @@ const Toolbar = (props) => {
             <div className={classes.Logo}>
                 <Logo/>
             </div>
-            {/* <h1 className={classes.Headline}>Sozialverband hilfebedürftiger Menschen e.V.</h1> */}
+            { (props.displayHeadline) ? (
+                <h1 className={classes.Headline}>Sozialverband hilfebedürftiger Menschen e.V.</h1>
+                ) : null
+            }
             <DrawerToggle isActive={props.isDrawerActive} clicked={props.drawerToggleClicked}/>
         </header>
     )
