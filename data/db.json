@@ -92,5 +92,28 @@
                 "price": 0.5,
                 "type": "salad"
             }
-        ]
+        ],
+    "offices": [
+        {
+            "id" : 1,
+            "district": "Landeshauptstadt Magdeburg",
+            "city": "Magdeburg",
+            "street": "Halberstädter Str. 134",
+            "zip_code": 39112
+        },
+        {
+            "id" : 2,
+            "district": "Landkreis Harz",
+            "city": "Wernigerode",
+            "street": "Dornbergsweg 2",
+            "zip_code": 38855
+        },
+        {
+            "id" : 3,
+            "district": "Salzlandkreis",
+            "city": "Calbe/Saale",
+            "street": "Breite 44",
+            "zip_code": 39240
+        }
+    ]
 }
