@@ -24,8 +24,7 @@ const BurgerBuilder = () => {
 
     const updateBurger = (burger) => {
         const burgers = getBurgers().map((b) => (b.id === burger.id) ? burger : b); 
-        setBurgers(burgers);
-
+        setBurgers([...burgers]);
     } 
 
     /** @returns {{id: string, ingredients: array, price: number, purchase: boolean}} */
@@ -89,8 +88,16 @@ const BurgerBuilder = () => {
         setPurchasingState(!purchasing);
     }
 
+    const modelCloseHandler = () => {
+        setPurchasingState(false);
+    }
+
     const purchaseCancelHandler = () => {
         setPurchasingState(false);
+    }
+
+    const purchaseContinueHandler = () => {
+
     }
 
     return (
@@ -98,11 +105,16 @@ const BurgerBuilder = () => {
             {
                 (isLoading) ? (
                     <p>Loading ...</p>
-                ) : burgers.map((burger) => {
+                ) : getBurgers().map((burger) => {
                     return (
                     <Aux key={burger.id}>
-                        <ModalComponent modalClose={purchaseCancelHandler} show={purchasing}>
-                            <OrderSummaryComponent ingredients={burger.ingredients}/>
+                        <ModalComponent close={modelCloseHandler} show={purchasing}>
+                            <OrderSummaryComponent 
+                            price={burger.price}
+                            ingredients={burger.ingredients}
+                            purchaseCancel={purchaseCancelHandler}
+                            purchaseContinue={purchaseContinueHandler}
+                            />
                         </ModalComponent>
                         <BurgerComponent ingredients={burger.ingredients}/>
                         <Controls 

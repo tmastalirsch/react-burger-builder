@@ -9,14 +9,14 @@ const ModalComponent = (props) => {
 
     return (
         <Aux>
-            <BackdropComponent clicked={props.modalClose} show={props.show}/>
+            <BackdropComponent clicked={props.close} show={props.show}/>
             <div 
                 className={classes.Modal}
                 style={
                     {
                         transform: props.show ? 'translateX(0)' : 'translateY(-100)',
                         opacity: props.show ? '1' : '0',
-                        visibility: props.show ? 'visible' : 'hidden'
+                        display: props.show ? 'block' : 'none'
                     }
                     }>
                     {props.children}
