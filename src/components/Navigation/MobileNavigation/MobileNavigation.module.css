@@ -1,0 +1,26 @@
+.MobileNavigation {
+    position: fixed; 
+    height: 80vH;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    background-image: linear-gradient(90deg, #e8411d 35%, #f07d0d);
+    padding: 80px 16px 32px 16px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-out;
+    z-index: 150;
+}
+
+.Open {
+    transform: translateY(0);
+}
+
+.Close {
+    transform: translateY(-100%);
+}
+
+@media(min-width: 500px) {
+    .MobileNavigation {
+        display: none;
+    }
+}
